@@ -1,14 +1,19 @@
 {
-  "name": "root",
+  "name": "@struers/storybook-addon-cssprops",
   "version": "0.2.0",
-  "homepage": "https://github.com/ljcl/storybook-addon-cssprops",
-  "repository": "https://github.com/ljcl/storybook-addon-cssprops.git",
-  "author": "Luke Clark <luke@lukeclark.com.au>",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Struers/storybook-addon-cssprops.git"
+  },
+  "author": "Marek Fronc <marek.fronc@struers.dk>",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "access": "restricted"
+  },
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
     "concurrently": "^7.2.2",
