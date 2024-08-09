@@ -1,10 +1,11 @@
 import * as React from "react";
-import { addons, types } from "@storybook/manager-api";
+import { addons, types, LeafEntry } from "@storybook/manager-api";
 import { AddonPanel } from "@storybook/components";
 import { API } from "@storybook/manager-api";
 import { CssPropsPanel } from "./components/CssPropsPanel";
 import { useTitle } from "./title";
 import { ADDON_ID, PARAM_KEY } from "./constants";
+ let story :LeafEntry
 
 addons.register(ADDON_ID, (api: API) => {
   addons.add(ADDON_ID, {
@@ -12,7 +13,7 @@ addons.register(ADDON_ID, (api: API) => {
     type: types.PANEL,
     paramKey: PARAM_KEY,
     render: ({ active }) => {
-      const story = api.getCurrentStoryData();
+      story = api.getCurrentStoryData();
       if (!active || !story) {
         return <React.Fragment key="nothing">-</React.Fragment>;
       }
@@ -24,3 +25,4 @@ addons.register(ADDON_ID, (api: API) => {
     },
   });
 });
+export  {story}

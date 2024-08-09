@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/ljcl/storybook-addon-cssprops",
   "repository": "https://github.com/ljcl/storybook-addon-cssprops.git",
   "author": "Luke Clark <luke@lukeclark.com.au>",
@@ -30,7 +30,7 @@
     "build": "turbo run build --filter=!examples",
     "dev": "turbo run dev --no-cache --parallel --continue"
   },
-  "packageManager": "pnpm@7.30.5",
+  "packageManager": "pnpm@9.6.0+sha256.dae0f7e822c56b20979bb5965e3b73b8bdabb6b8b8ef121da6d857508599ca35",
   "pnpm": {
     "overrides": {
       "webpack": "^5"
