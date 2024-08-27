@@ -1,6 +1,6 @@
 {
-  "name": "@ljcl/storybook-addon-cssprops",
-  "version": "4.0.0",
+  "name": "@struers/storybook-addon-cssprops",
+  "version": "1.0.0",
   "description": "Interact with css custom properties dynamically in the Storybook UI",
   "keywords": [
     "storybook-addons",
@@ -12,10 +12,15 @@
     "addon",
     "storybook"
   ],
-  "homepage": "https://github.com/ljcl/storybook-addon-cssprops/tree/main/packages/storybook-addon-cssprops",
-  "repository": "https://github.com/ljcl/storybook-addon-cssprops.git",
-  "author": "Luke Clark <luke@lukeclark.com.au>",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Struers/storybook-addon-cssprops.git"
+  },
+  "author": "Marek Fronc <marek.fronc@struers.dk>",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "access": "restricted"
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -63,9 +68,5 @@
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "clean": "rimraf .turbo && rimraf dist",
     "prepublishOnly": "pnpm run clean && cp ../../README.md ./ && cp -r ../../assets ./ && pnpm build"
-  },
-  "publishConfig": {
-    "access": "public",
-    "tag": "latest"
   }
 }
