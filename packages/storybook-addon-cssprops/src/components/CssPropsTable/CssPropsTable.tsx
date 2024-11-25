@@ -5,6 +5,7 @@ import { useInjectCustomProperties } from "../hooks/useInjectCustomProperties";
 import { CssPropertyItemGroup, CustomPropertiesKeyValues } from "./types";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { ADDON_ID } from "../../constants";
+import { useStorybookApi } from "@storybook/manager-api";
 
 export interface CssPropsTableProps {
   customProperties: CssPropertyItemGroup;
@@ -60,9 +61,6 @@ const formatForArgsTable = ({
       table: {
         category: customProperty.category,
         subcategory: customProperty.subcategory,
-        // Hack:
-        // ArgValue/ArgsSummary is looking for an object here, not a string
-        // trick it into returning null rather than a <span>-</span>
         type: "CSS Custom Property",
         defaultValue: {
           summary: initialCustomProperty,
@@ -84,8 +82,6 @@ const mergeCustomPropertiesWithStoredPropertiesAndFormatForArgsTable = ({
   initialCustomProperties: {
     [storyId: string]: CustomPropertiesKeyValues;
   };
-  storyId: string;
-  presetColors?: string[];
 }) => {
   const updatedCustomProperties: CssPropertyItemGroup = { ...customProperties };
   Object.keys(customProperties).forEach((key) => {
@@ -125,9 +121,19 @@ export const CssPropsTable = ({
     },
   });
 
+  const api = useStorybookApi();
+  const [componentName, setComponentName] = React.useState<string | undefined>();
+
+  React.useEffect(() => {
+    const storyData = api.getCurrentStoryData();
+    console.log('StoryData', storyData);
+    if (storyData) {
+      setComponentName(storyData.component?.name || storyId);
+    }
+  }, [api, storyId]);
+
   React.useEffect(() => {
     if (storedProperties && !("initialCustomProperties" in storedProperties)) {
-      // The storage may be formatted in as it is in prior versions, causing storybook to crash, reset it
       setStoredProperties({
         customProperties: { [storyId]: customPropertyValues },
         initialCustomProperties: { [storyId]: customPropertyValues },
@@ -202,7 +208,11 @@ export const CssPropsTable = ({
     setRows(newRows);
   };
 
-  useInjectCustomProperties(storedProperties.customProperties?.[storyId]);
+  if (componentName === undefined) {
+    setComponentName(storyId);
+  }
+  console.log('ComponentName', componentName);
+  useInjectCustomProperties(storedProperties.customProperties?.[storyId], componentName);
 
   const handleResetProps = () => {
     setStoredProperties({
@@ -212,8 +222,6 @@ export const CssPropsTable = ({
       },
       initialCustomProperties: storedProperties.initialCustomProperties,
     });
-    // We can't reset the args table colour control unfortunately :/
-    // Clear the storage and reload for now.
     window.location.reload();
   };
 
@@ -236,16 +244,19 @@ export const CssPropsTable = ({
   }, [storyId]);
 
   return (
-    <PureArgsTable
-      key={stateStoryId}
-      inAddonPanel={inAddonPanel}
-      resetArgs={handleResetProps}
-      rows={rows}
-      updateArgs={(arg) => {
-        const [name] = Object.keys(arg);
-        const value = arg[name];
-        handleUpdateStorage({ [name]: value });
-      }}
-    />
+    <div>
+      <h3>Component: {componentName}</h3>
+      <PureArgsTable
+        key={stateStoryId}
+        inAddonPanel={inAddonPanel}
+        resetArgs={handleResetProps}
+        rows={rows}
+        updateArgs={(arg) => {
+          const [name] = Object.keys(arg);
+          const value = arg[name];
+          handleUpdateStorage({ [name]: value });
+        }}
+      />
+    </div>
   );
 };
